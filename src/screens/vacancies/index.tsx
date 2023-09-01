@@ -35,17 +35,20 @@ export function VacanciesScreen() {
 
   return (
     <div className="container p-5 mx-auto">
-      <Switch
-        isSelected={darkMode.value}
-        onValueChange={(v) => {
-          v ? darkMode.enable() : darkMode.disable();
-          window.location.reload();
-        }}
-        size="lg"
-        color="success"
-      >
-        Dark mode
-      </Switch>
+      <div className="flex mb-3">
+        <div className="w-16 pl-2">
+          <img src="logo_transparent.png" alt="logo" className="" />
+        </div>
+        <Switch
+          className="ml-auto"
+          isSelected={darkMode.value}
+          onValueChange={(v) => (v ? darkMode.enable() : darkMode.disable())}
+          size="lg"
+          startContent={<p>🌞</p>}
+          endContent={<p>🌚</p>}
+          color="success"
+        />
+      </div>
       <div>
         <Input
           className="mb-3"
