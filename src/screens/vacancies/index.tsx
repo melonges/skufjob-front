@@ -1,4 +1,5 @@
-import { Input, CircularProgress } from "@nextui-org/react";
+import { Input, CircularProgress, Switch } from "@nextui-org/react";
+import useDarkMode from "use-dark-mode";
 import { VacancyList } from "./components/vacancy-list";
 import { useVacancyQuery } from "../../store/services/api";
 import { useState } from "react";
@@ -10,6 +11,7 @@ const LIMIT_PER_PAGE = 10;
 export function VacanciesScreen() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
+  const darkMode = useDarkMode();
   const debouncedSearch = useDebounce(search);
 
   const { data, error, status, isLoading } = useVacancyQuery({
@@ -28,11 +30,22 @@ export function VacanciesScreen() {
   }
 
   if (isLoading) {
-    return "ЗАГРУЖАЕМСЯ ПЕРВЫЙ РАЗ";
+    return <h1>"ЗАГРУЖАЕМСЯ ПЕРВЫЙ РАЗ"</h1>;
   }
 
   return (
     <div className="container p-5 mx-auto">
+      <Switch
+        isSelected={darkMode.value}
+        onValueChange={(v) => {
+          v ? darkMode.enable() : darkMode.disable();
+          window.location.reload();
+        }}
+        size="lg"
+        color="success"
+      >
+        Dark mode
+      </Switch>
       <div>
         <Input
           className="mb-3"
@@ -41,7 +54,6 @@ export function VacanciesScreen() {
           size="lg"
           label={`Search of ${data?.count || 0} vacancies`}
         />
-
         {status === QueryStatus.pending && (
           <div className="flex justify-center">
             <CircularProgress size="sm" />
@@ -49,12 +61,12 @@ export function VacanciesScreen() {
         )}
       </div>
 
-      {data.vacancies.length < 1 ? (
+      {data!.vacancies.length < 1 ? (
         <div className="text-red-500">
           С такими запросами только на завод (не нашли ничо)
         </div>
       ) : (
-        <VacancyList vacancies={data.vacancies} />
+        <VacancyList vacancies={data!.vacancies} />
       )}
     </div>
   );

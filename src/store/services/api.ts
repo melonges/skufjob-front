@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { VacancyResponse } from "./type";
 
-const baseUrl = "http://localhost:5002/";
+const baseUrl = import.meta.env.API_URL || "http://localhost:5002";
 
 export const api = createApi({
   reducerPath: "baseApi",
