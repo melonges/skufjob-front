@@ -21,11 +21,12 @@ export function VacancyList({ vacancies }: { vacancies: Vacancy[] }) {
     <div className="w-full md:columns-2 lg:columns-3">
       {vacancies.map((vacancy) => {
         const vacancyHtml = script;
-        vacancyHtml.setAttribute("data-telegram-post", vacancy.link);
+        const decodedVacancyString = atob(vacancy);
+        vacancyHtml.setAttribute("data-telegram-post", decodedVacancyString);
         return (
           <div
             dangerouslySetInnerHTML={{ __html: vacancyHtml.outerHTML }}
-            key={vacancy.id}
+            key={vacancy}
             className="mb-3"
           ></div>
         );

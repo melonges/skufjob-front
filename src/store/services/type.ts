@@ -1,7 +1,4 @@
-export type Vacancy = {
-  id: number;
-  link: string;
-};
+export type Vacancy = string;
 
 export type VacancyResponse = {
   count: number;

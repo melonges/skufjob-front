@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { VacancyResponse } from "./type";
 
-const baseUrl = import.meta.env.API_URL || "http://localhost:5002";
+const baseUrl = import.meta.env.API_URL || "http://localhost:3000";
 
 export const api = createApi({
   reducerPath: "baseApi",
@@ -14,10 +14,12 @@ export const api = createApi({
       VacancyResponse,
       { search: string; page: number; limit?: number }
     >({
-      query: ({ search }) => ({
+      query: ({ search, page, limit }) => ({
         url: "/vacancy",
         params: {
           search,
+          page,
+          limit,
         },
       }),
     }),

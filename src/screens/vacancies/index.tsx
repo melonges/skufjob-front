@@ -1,4 +1,10 @@
-import { Input, CircularProgress, Switch } from "@nextui-org/react";
+import {
+  Input,
+  CircularProgress,
+  Switch,
+  Pagination,
+  Progress,
+} from "@nextui-org/react";
 import useDarkMode from "use-dark-mode";
 import { VacancyList } from "./components/vacancy-list";
 import { useVacancyQuery } from "../../store/services/api";
@@ -10,7 +16,7 @@ const LIMIT_PER_PAGE = 10;
 
 export function VacanciesScreen() {
   const [search, setSearch] = useState("");
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const darkMode = useDarkMode();
   const debouncedSearch = useDebounce(search);
 
@@ -30,7 +36,14 @@ export function VacanciesScreen() {
   }
 
   if (isLoading) {
-    return <h1>"ЗАГРУЖАЕМСЯ ПЕРВЫЙ РАЗ"</h1>;
+    return (
+      <Progress
+        size="sm"
+        isIndeterminate
+        aria-label="Loading..."
+        className="max-w-md"
+      />
+    );
   }
 
   return (
@@ -70,6 +83,15 @@ export function VacanciesScreen() {
         </div>
       ) : (
         <VacancyList vacancies={data!.vacancies} />
+      )}
+      {data && (
+        <div className="flex items-center justify-center pt-5">
+          <Pagination
+            total={Math.ceil(data.count / LIMIT_PER_PAGE)}
+            page={page}
+            onChange={(p) => setPage(p)}
+          />
+        </div>
       )}
     </div>
   );
