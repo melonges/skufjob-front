@@ -4,6 +4,7 @@ import {
   Switch,
   Pagination,
   Progress,
+  Image,
 } from "@nextui-org/react";
 import useDarkMode from "use-dark-mode";
 import { VacancyList } from "./components/vacancy-list";
@@ -28,7 +29,7 @@ export function VacanciesScreen() {
 
   if (status === QueryStatus.rejected) {
     return (
-      <div>
+      <div className="text-center">
         Cервак здох походу 😂😂😂👍
         <pre>{JSON.stringify(error)}</pre>
       </div>
@@ -49,8 +50,8 @@ export function VacanciesScreen() {
   return (
     <div className="container p-5 mx-auto">
       <div className="flex mb-3">
-        <div className="w-16 pl-2">
-          <img src="logo_transparent.png" alt="logo" className="" />
+        <div className="w-16 pl-2 slide-in-blurred-topslide-in-blurred-top">
+          <Image src="SkufJob-logo.png" alt="logo" className="rounded-md" />
         </div>
         <Switch
           className="ml-auto"
@@ -59,7 +60,7 @@ export function VacanciesScreen() {
           size="lg"
           startContent={<p>🌞</p>}
           endContent={<p>🌚</p>}
-          color="success"
+          color="secondary"
         />
       </div>
       <div>
@@ -76,15 +77,14 @@ export function VacanciesScreen() {
           </div>
         )}
       </div>
-
       {data!.vacancies.length < 1 ? (
-        <div className="text-red-500">
-          С такими запросами только на завод (не нашли ничо)
+        <div className="text-red-500 text-center">
+          <p>Nothing found</p>
         </div>
       ) : (
         <VacancyList vacancies={data!.vacancies} />
       )}
-      {data && (
+      {data?.count ? (
         <div className="flex items-center justify-center pt-5">
           <Pagination
             total={Math.ceil(data.count / LIMIT_PER_PAGE)}
@@ -92,7 +92,7 @@ export function VacanciesScreen() {
             onChange={(p) => setPage(p)}
           />
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
