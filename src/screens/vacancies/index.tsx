@@ -77,7 +77,7 @@ export function VacanciesScreen() {
           </div>
         )}
       </div>
-      {data!.vacancies.length < 1 ? (
+      {data!.vacancies.length < 1 && !isLoading ? (
         <div className="text-red-500 text-center">
           <p>Nothing found</p>
         </div>
