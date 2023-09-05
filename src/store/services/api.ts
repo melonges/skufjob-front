@@ -1,8 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { VacancyResponse } from "./type";
 
-const baseUrl = import.meta.env.API_URL || "http://localhost:3000";
-
+let baseUrl;
+if (window.location.hostname.includes("online")) {
+  baseUrl = import.meta.env.VITE_API_URL_GLOBAL;
+} else {
+  baseUrl = import.meta.env.VITE_API_URL_RU;
+}
 export const api = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
