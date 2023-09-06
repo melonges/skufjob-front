@@ -19,7 +19,7 @@ export function VacanciesScreen() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const darkMode = useDarkMode();
-  const debouncedSearch = useDebounce(search);
+  const debouncedSearch = useDebounce(search, 500, () => setPage(1));
 
   const { data, error, status, isLoading } = useVacancyQuery({
     search: debouncedSearch,
