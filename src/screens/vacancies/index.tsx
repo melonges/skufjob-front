@@ -72,7 +72,7 @@ export function VacanciesScreen() {
           label={`Search of ${data?.count || 0} vacancies`}
         />
         {status === QueryStatus.pending && (
-          <div className="flex justify-center">
+          <div className="flex justify-center mb-2">
             <CircularProgress size="sm" />
           </div>
         )}

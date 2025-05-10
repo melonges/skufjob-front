@@ -1,14 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { VacancyResponse } from "./type";
 
-const baseUrl = import.meta.env.VITE_BASE_URL;
+const baseUrl = import.meta.env.DEV ? "/api" : import.meta.env.VITE_BASE_URL;
 
 export const api = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
     baseUrl,
   }),
-  tagTypes: [],
+  tagTypes: ["Vacancies"],
   endpoints: (builder) => ({
     vacancy: builder.query<
       VacancyResponse,
@@ -17,13 +17,21 @@ export const api = createApi({
       query: ({ search, page, limit }) => ({
         url: "/vacancy",
         params: {
-          search,
+          ...(search && { search }),
           page,
           limit,
         },
       }),
+      providesTags: ["Vacancies"],
+    }),
+    deleteVacancy: builder.mutation({
+      query: (id) => ({
+        url: `/vacancy/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Vacancies"],
     }),
   }),
 });
 
-export const { useVacancyQuery } = api;
+export const { useVacancyQuery, useDeleteVacancyMutation } = api;
