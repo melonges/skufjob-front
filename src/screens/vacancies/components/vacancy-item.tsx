@@ -3,36 +3,43 @@ import { useTelegramWidget } from "../../../hooks/use-telegram-widget";
 import { useEffect, useMemo, useState } from "react";
 import useDarkMode from "use-dark-mode";
 import { Button } from "@nextui-org/react";
-import { useDeleteVacancyMutation } from "../../../store/services/api";
+import {
+  getSavedVacancies,
+  saveVacancies,
+} from "../../../shared/utils/local-storage";
 
 export function VacancyItem({ vacancy }: { vacancy: Vacancy }) {
   const darkMode = useDarkMode();
-  const [showDeleteButton, setShowDeleteButton] = useState(false);
-  const [deleteVacancy] = useDeleteVacancyMutation();
+  const [showSavedListButton, setShowSavedListButton] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  useTelegramWidget([darkMode]);
+
+  useEffect(() => {
+    const saved = getSavedVacancies();
+    setIsSaved(saved.includes(vacancy));
+  }, [vacancy]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.shiftKey) {
-        setShowDeleteButton(true);
+        setShowSavedListButton(true);
       }
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
       if (!e.shiftKey) {
-        setShowDeleteButton(false);
+        setShowSavedListButton(false);
       }
     };
 
-    document.addEventListener("keyup", handleKeyUp);
     document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
     };
   }, []);
-
-  useTelegramWidget([darkMode]);
 
   const vacancyHtml = useMemo(() => {
     const script = document.createElement("script");
@@ -47,22 +54,38 @@ export function VacancyItem({ vacancy }: { vacancy: Vacancy }) {
     return script;
   }, [darkMode, vacancy]);
 
-  const handleDelete = () => {
-    console.log("Delete button clicked", vacancy);
-    deleteVacancy(vacancy);
+  const handleToggleSave = () => {
+    let savedVacancies = getSavedVacancies();
+
+    if (isSaved) {
+      savedVacancies = savedVacancies.filter((v) => v !== vacancy);
+      console.log("Vacancy unsaved:", decodedVacancyString);
+    } else {
+      if (!savedVacancies.includes(vacancy)) {
+        savedVacancies = [...savedVacancies, vacancy];
+        console.log("Vacancy saved:", decodedVacancyString);
+      }
+    }
+    saveVacancies(savedVacancies);
+    setIsSaved(!isSaved);
   };
+
+  const decodedVacancyString = useMemo(() => atob(vacancy), [vacancy]);
 
   return (
     <div className="relative">
       <div
         dangerouslySetInnerHTML={{ __html: vacancyHtml.outerHTML }}
-        key={vacancy}
         className="mb-3"
       />
-      {showDeleteButton && (
-        <div className="absolute top-2 left-4">
-          <Button color="danger" onClick={handleDelete}>
-            DELETE
+      {showSavedListButton && (
+        <div className="absolute top-2 left-4 z-10">
+          <Button
+            color={isSaved ? "warning" : "primary"}
+            onClick={handleToggleSave}
+            size="md"
+          >
+            {isSaved ? "♥ UNSAVE" : "♥ SAVE"}
           </Button>
         </div>
       )}

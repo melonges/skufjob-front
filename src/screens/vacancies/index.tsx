@@ -1,12 +1,9 @@
 import {
   Input,
   CircularProgress,
-  Switch,
   Pagination,
   Progress,
-  Image,
 } from "@nextui-org/react";
-import useDarkMode from "use-dark-mode";
 import { VacancyList } from "./components/vacancy-list";
 import { useVacancyQuery } from "../../store/services/api";
 import { useState } from "react";
@@ -18,7 +15,6 @@ const LIMIT_PER_PAGE = 10;
 export function VacanciesScreen() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const darkMode = useDarkMode();
   const debouncedSearch = useDebounce(search, 500, () => setPage(1));
 
   const { data, error, status, isLoading } = useVacancyQuery({
@@ -42,27 +38,13 @@ export function VacanciesScreen() {
         size="sm"
         isIndeterminate
         aria-label="Loading..."
-        className="max-w-md"
+        className="w-full"
       />
     );
   }
 
   return (
-    <div className="container p-5 mx-auto">
-      <div className="flex mb-3">
-        <div className="w-16 pl-2 slide-in-blurred-topslide-in-blurred-top">
-          <Image src="SkufJob-logo.png" alt="logo" className="rounded-md" />
-        </div>
-        <Switch
-          className="ml-auto"
-          isSelected={darkMode.value}
-          onValueChange={(v) => (v ? darkMode.enable() : darkMode.disable())}
-          size="lg"
-          startContent={<p>🌞</p>}
-          endContent={<p>🌚</p>}
-          color="secondary"
-        />
-      </div>
+    <>
       <div>
         <Input
           className="mb-3"
@@ -93,6 +75,6 @@ export function VacanciesScreen() {
           />
         </div>
       ) : null}
-    </div>
+    </>
   );
 }

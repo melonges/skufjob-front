@@ -6,6 +6,7 @@ import { VacancyItem } from "./vacancy-item";
 export function VacancyList({ vacancies }: { vacancies: Vacancy[] }) {
   const darkMode = useDarkMode();
   useTelegramWidget([darkMode]);
+
   return (
     <div className="w-full md:columns-2 lg:columns-3">
       {vacancies.map((vacancy) => (
