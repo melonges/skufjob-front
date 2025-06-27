@@ -8,38 +8,16 @@ import {
   saveVacancies,
 } from "../../../shared/utils/local-storage";
 
-export function VacancyItem({ vacancy }: { vacancy: Vacancy }) {
+export function VacancyItem({ vacancy, showSavedListButton }: { vacancy: Vacancy, showSavedListButton?: boolean }) {
   const darkMode = useDarkMode();
-  const [showSavedListButton, setShowSavedListButton] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   useTelegramWidget([darkMode]);
 
   useEffect(() => {
     const saved = getSavedVacancies();
     setIsSaved(saved.includes(vacancy));
-  }, [vacancy]);
+  }, [vacancy, showSavedListButton]);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.shiftKey) {
-        setShowSavedListButton(true);
-      }
-    };
-
-    const handleKeyUp = (e: KeyboardEvent) => {
-      if (!e.shiftKey) {
-        setShowSavedListButton(false);
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keyup", handleKeyUp);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keyup", handleKeyUp);
-    };
-  }, []);
 
   const vacancyHtml = useMemo(() => {
     const script = document.createElement("script");
