@@ -5,22 +5,22 @@ import {
   Progress,
 } from "@nextui-org/react";
 import { VacancyList } from "./components/vacancy-list";
-import { useVacancyQuery } from "../../store/services/api";
+import { LIMIT_PER_PAGE, apiPaginaton, useVacancyQuery } from "../../store/services/api";
 import { useState } from "react";
 import { useDebounce } from "../../hooks/use-debounce";
 import { QueryStatus } from "@reduxjs/toolkit/dist/query";
+import { useUrlState } from 'state-in-url/react-router';
 
-const LIMIT_PER_PAGE = 10;
 
 export function VacanciesScreen() {
   const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const debouncedSearch = useDebounce(search, 500, () => setPage(1));
+  const { urlState, setUrl } = useUrlState(apiPaginaton)
+  const debouncedSearch = useDebounce(search, 500, () => setUrl({ page: urlState.page }));
 
   const { data, error, status, isLoading } = useVacancyQuery({
     search: debouncedSearch,
-    page,
-    limit: LIMIT_PER_PAGE,
+    page: urlState.page,
+    limit: urlState.limit,
   });
 
   if (status === QueryStatus.rejected) {
@@ -70,8 +70,8 @@ export function VacanciesScreen() {
         <div className="flex items-center justify-center pt-5">
           <Pagination
             total={Math.ceil(data.count / LIMIT_PER_PAGE)}
-            page={page}
-            onChange={(p) => setPage(p)}
+            page={urlState.page}
+            onChange={page => setUrl({ page })}
           />
         </div>
       ) : null}
