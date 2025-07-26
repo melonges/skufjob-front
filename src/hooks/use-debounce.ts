@@ -9,8 +9,10 @@ export function useDebounce<T>(
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedValue(value);
-      onChange?.();
+      setDebouncedValue(prevValue => {
+        prevValue !== value && onChange?.();
+        return value
+      });
     }, delay);
 
     return () => {

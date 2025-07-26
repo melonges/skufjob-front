@@ -6,6 +6,10 @@ export type VacancyResponse = {
 };
 
 export type Pagination = {
+};
+
+export type UrlState = {
+  search: string;
   page: number;
   limit: number;
-};
+}
