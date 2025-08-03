@@ -14,6 +14,7 @@ export function VacancySearch() {
       label="Search vacancies"
       isClearable
       onClear={() => setUrl({ search: "" })}
+      description="Use operators for advanced search: & (AND), | (OR), ! (NOT), <-> (FOLLOWED BY)."
     />
   );
 }
