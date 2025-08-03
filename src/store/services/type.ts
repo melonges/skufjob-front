@@ -5,9 +5,6 @@ export type VacancyResponse = {
   vacancies: Vacancy[];
 };
 
-export type Pagination = {
-};
-
 export type UrlState = {
   search: string;
   page: number;

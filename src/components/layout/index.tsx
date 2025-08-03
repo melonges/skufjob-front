@@ -1,8 +1,12 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { Image } from "@nextui-org/react";
+import { Image, Chip } from "@nextui-org/react";
 import { ThemeSwitcher } from "../theme-switcher";
+import { useVacancyQuery } from "../../store/services/api";
+import { urlState } from "../../store/services/api";
 
 export function Layout() {
+  const { data } = useVacancyQuery(urlState);
+
   return (
     <div className="container p-5 mx-auto">
       <div className="flex justify-between mb-3">
@@ -14,6 +18,7 @@ export function Layout() {
         </NavLink>
 
         <div className="flex items-center gap-4">
+          <Chip variant="shadow" color="warning">All vacancies: {data?.count}</Chip>
           <NavLink
             to="/favorites"
             className={({ isActive }) =>
@@ -22,9 +27,8 @@ export function Layout() {
               }`
             }
           >
-            💼 Saved Jobs
+           💼 Saved Jobs 
           </NavLink>
-
           <ThemeSwitcher />
         </div>
       </div>

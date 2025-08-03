@@ -60,10 +60,15 @@ export function VacanciesScreen() {
 
       {data && data.vacancies.length > 0 && (
         <>
+          <div className="text-sm text-foreground-400">
+            Found {data.count} vacancies
+          </div>
           <VacancyList vacancies={data.vacancies} />
           {data.count > LIMIT_PER_PAGE && (
             <div className="flex items-center justify-center pt-5">
               <Pagination
+                color="warning"
+                variant="faded"
                 total={Math.ceil(data.count / LIMIT_PER_PAGE)}
                 page={state.page}
                 onChange={(page) => setUrl({ page })}
