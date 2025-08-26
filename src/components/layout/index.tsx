@@ -1,11 +1,12 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { Image } from "@nextui-org/react";
 import { ThemeSwitcher } from "../theme-switcher";
+import { Footer } from "../footer";
 
 export function Layout() {
 
   return (
-    <div className="container p-5 mx-auto">
+    <div className="container p-5 mx-auto flex flex-col min-h-screen">
       <div className="flex justify-between mb-3">
         <NavLink
           to="/"
@@ -29,7 +30,11 @@ export function Layout() {
         </div>
       </div>
 
-      <Outlet />
+      <div className="flex-grow">
+        <Outlet />
+      </div>
+      
+      <Footer />
     </div>
   );
 }
